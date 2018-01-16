@@ -1,0 +1,7 @@
+- name: Set up workstation
+  hosts: workstations
+  become: True
+  vars:
+    - user: rsaarelm
+  roles:
+    - role: workstation

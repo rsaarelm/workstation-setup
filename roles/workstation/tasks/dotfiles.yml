@@ -1,0 +1,12 @@
+# Make dotfiles read-only when deployed because the workflow is to only edit
+# them through Ansible.
+- name: create dotfile directoiries
+  file: path=/home/{{ user }}/{{ item }} state=directory owner={{ user }}
+  with_items:
+    - .config/i3
+
+- name: install dotfiles
+  copy: src={{ item }} dest=/home/{{ user }}/{{ item }} mode=0400 owner={{ user }}
+  with_items:
+    - .zshrc
+    - .config/i3/config

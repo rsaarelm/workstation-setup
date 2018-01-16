@@ -1,0 +1,6 @@
+---
+- name: User account for {{ user }}
+  user: >
+      name={{ user }} state=present home=/home/{{ user }}
+      append=yes shell=/bin/zsh generate_ssh_key=yes
+# TODO setup sudoers

@@ -1,0 +1,44 @@
+- name: update the apt cache
+  apt: update_cache=Yes
+- name: install common software
+  apt: name={{item}} state=installed
+  with_items:
+    - sudo
+    - vim
+    - git
+    - tmux
+    - mosh
+    - p7zip-full
+    - youtube-dl
+    - imagemagick
+    - optipng
+    - zsh
+- name: install desktop environment
+  apt: name={{item}} state=installed
+  with_items:
+    - i3
+    - lightdm
+- name: install desktop software
+  apt: name={{item}} state=installed
+  with_items:
+    - chromium
+    - mupdf
+    - djview4
+    - mcomix
+    - feh
+    - vim-gtk3
+    - grafx2
+    - mplayer
+    - x11-xserver-utils
+    - gimp
+# TODO: Move to HTPC config
+- name: install games
+  apt: name={{item}} state=installed
+  with_items:
+    - retroarch
+    - kodi
+    - nethack-console
+    - crawl
+    - crawl-tiles
+    - angband
+    - kobodeluxe
