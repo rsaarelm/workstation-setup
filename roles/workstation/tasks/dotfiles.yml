@@ -1,6 +1,6 @@
 # Make dotfiles read-only when deployed because the workflow is to only edit
 # them through Ansible.
-- name: create dotfile directoiries
+- name: create dotfile directories
   file: path=/home/{{ user }}/{{ item }} state=directory owner={{ user }}
   with_items:
     - .config/i3
@@ -19,3 +19,11 @@
   get_url:
     url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     dest: /home/{{ user }}/.vim/autoload/plug.vim
+    owner: "{{ user }}"
+
+# FIXME: Get this working
+#- name: install vim plugins
+#  command: vim +PlugInstall +qall
+#  chdir: /home/{{ user }}
+#  become: true
+#  become_user: "{{ user }}"
