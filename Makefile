@@ -8,4 +8,4 @@ vm:
 	vagrant up
 
 dotfiles: workstation.yml requirements vm
-	ansible-playbook workstation.yml --tags "user"
+	ansible-playbook workstation.yml --tags "dotfiles"
