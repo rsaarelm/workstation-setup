@@ -27,9 +27,10 @@
   tags:
     - user
 
-# FIXME: Get this working
-#- name: install vim plugins
-#  command: vim +PlugInstall +qall
-#  chdir: /home/{{ user }}
-#  become: true
-#  become_user: "{{ user }}"
+- name: install vim plugins
+  command: vim +PlugInstall +qall
+  chdir: /home/{{ user }}
+  become: true
+  become_user: "{{ user }}"
+  tags:
+    - user
