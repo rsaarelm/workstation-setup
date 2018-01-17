@@ -18,6 +18,7 @@
     - .vimrc
     - .config/i3/config
     - .config/i3status/config
+    - .Xresources
   tags:
     - user
 
