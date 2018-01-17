@@ -13,6 +13,7 @@
     - imagemagick
     - optipng
     - zsh
+    - tmpreaper
 - name: install desktop environment
   apt: name={{item}} state=installed
   with_items:

@@ -3,3 +3,29 @@
   user: >
       name={{ user }} state=present home=/home/{{ user }}
       groups=wheel append=yes shell=/bin/zsh generate_ssh_key=yes
+
+- name: home subdirs for {{ user }}
+  file: path=/home/{{ user }}/{{ item }} state=directory owner={{ user }}
+  with_items:
+    - bin
+    - tmp
+
+- name: setup tmpreaper ~/{{ user }}/tmp
+  lineinfile:
+    path: /etc/tmpreaper.conf
+    state: present
+    regexp: "^TMPREAPER_DIRS="
+    line: "TMPREAPER_DIRS='/tmp/. /home/{{ user }}/tmp/.'"
+  lineinfile:
+    path: /etc/tmpreaper.conf
+    state: present
+    regexp: "^TMPREAPER_TIME="
+    line: "TMPREAPER_TIME=30d"
+
+- name: install this project
+  git:
+    repo: 'https://github.com/rsaarelm/workstation-setup'
+    dest: /home/{{ user }}/src/workstation-setup
+    update: no
+  become: true
+  become_user: "{{ user }}"
