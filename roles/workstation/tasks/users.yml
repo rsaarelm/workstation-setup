@@ -3,3 +3,5 @@
   user: >
       name={{ user }} state=present home=/home/{{ user }}
       groups=wheel append=yes shell=/bin/zsh generate_ssh_key=yes
+  tags:
+    - user

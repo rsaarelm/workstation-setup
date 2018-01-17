@@ -11,6 +11,8 @@
   group:
     name=wheel
     state=present
+  tags:
+    - user
 
 - name: Allow 'wheel' group to have passwordless sudo
   lineinfile:
