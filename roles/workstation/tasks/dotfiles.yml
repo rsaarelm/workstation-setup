@@ -6,6 +6,8 @@
     - .config/i3
     - .config/i3status
     - .vim/autoload
+    - .vim/swap
+    - .vim/backup
   tags:
     - user
 
