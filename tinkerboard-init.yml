@@ -1,0 +1,41 @@
+# Find the dynamic IP of a machine in wired LAN with something like
+#
+#   nmap -sn 192.168.1.0/24
+#
+# Use playbook without having to enter the prompts:
+#
+#   ansible-playbook tinkerboard-init.yml --extra-vars "dynamic_ip=192.168.1.82 become_host=metasyntactic"
+
+- hosts: localhost
+  gather_facts: no
+  vars_prompt:
+    - name: dynamic_ip
+      prompt: Enter Tinker Board current IP
+      private: no
+  tasks:
+    - add_host:
+        name: "{{ dynamic_ip }}"
+        groups: dynamically_created_hosts
+        # Out of the box TinkerOS image login/pass
+        ansible_ssh_user: linaro
+        ansible_ssh_pass: linaro
+
+- name: Configure static IP address
+  hosts: dynamically_created_hosts
+  become: yes
+  vars_prompt:
+    - name: become_host
+      prompt: Hostname from inventory to configure the Tinker Board as
+      private: no
+  tasks:
+    - blockinfile:
+        path: /etc/dhcpcd.conf
+        marker: "## {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          static
+          interface eth0
+          static ip_address={{ hostvars[become_host]['ansible_host'] }}
+          static routers=192.168.1.1
+          static domain_name_servers=192.168.1.1
+    - hostname:
+        name: "{{ become_host }}"
