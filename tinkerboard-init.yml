@@ -4,7 +4,10 @@
 #
 # Use playbook without having to enter the prompts:
 #
-#   ansible-playbook tinkerboard-init.yml --extra-vars "dynamic_ip=192.168.1.82 become_host=metasyntactic"
+#   ansible-playbook tinkerboard-init.yml --extra-vars "dynamic_ip=192.168.1.82 target_host=metasyntactic"
+#
+# The script will generate a user that's the same as your current host
+# username. If you want to override this, set 'main_user' in extra-vars
 
 - hosts: localhost
   gather_facts: no
@@ -20,25 +23,65 @@
         ansible_ssh_user: linaro
         ansible_ssh_pass: linaro
 
-- name: Configure static IP address
-  hosts: dynamically_created_hosts
+- hosts: dynamically_created_hosts
   become: yes
+  vars:
+    new_user: "{{ main_user | default(lookup('env', 'USER')) }}"
   vars_prompt:
-    - name: become_host
+    - name: target_host
       prompt: Hostname from inventory to configure the Tinker Board as
       private: no
   tasks:
-    - blockinfile:
+    - name: configure static IP address
+      blockinfile:
         path: /etc/dhcpcd.conf
         marker: "## {mark} ANSIBLE MANAGED BLOCK"
         block: |
           static
           interface eth0
-          static ip_address={{ hostvars[become_host]['ansible_host'] }}
+          static ip_address={{ hostvars[target_host]['ansible_host'] }}
           static routers=192.168.1.1
           static domain_name_servers=192.168.1.1
-    - hostname:
-        name: "{{ become_host }}"
-    - service:
+    - name: set hostname to '{{ target_host }}'
+      hostname:
+        name: "{{ target_host }}"
+    - lineinfile:
+        dest: /etc/hosts
+        state: present
+        line: '127.0.1.1       {{ target_host }}'
+
+    # XXX: The wheel group bit should be moved to some reusable place
+    - name: create 'wheel' group
+      group:
+        name=wheel
+        state=present
+    - name: allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+
+    - name: setup user '{{ new_user }}'
+      user:
+        name: "{{ new_user }}"
+        state: present
+        home: /home/{{ new_user }}
+        groups: wheel
+        append: yes
+        generate_ssh_key: yes
+    - name: setup /home/{{ new_user }}
+      file:
+        path: /home/{{ new_user }}
+        state: directory
+        owner: "{{ new_user }}"
+    - name: authorize your local SSH public key for '{{ new_user }}'
+      authorized_key:
+        user: "{{ new_user }}"
+        state: present
+        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+    - name: restart networking
+      service:
         name: dhcpcd
         state: restarted
