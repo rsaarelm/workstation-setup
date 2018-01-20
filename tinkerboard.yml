@@ -4,7 +4,6 @@
   become: yes
   roles:
     - workstation
-    - htpc
   tasks:
     # Mount the HD specific to this one device, doesn't belong in generic
     # settings.
