@@ -19,3 +19,7 @@
     regexp: '^%wheel'
     line: '%wheel ALL=(ALL) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
+
+- name: Set time zone to Europe/Helsinki
+  timezone:
+    name: Europe/Helsinki
