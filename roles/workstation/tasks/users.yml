@@ -6,6 +6,8 @@
 
 - name: home subdirs for {{ user }}
   file: path=/home/{{ user }}/{{ item }} state=directory owner={{ user }}
+  become: true
+  become_user: "{{ user }}"
   with_items:
     - bin
     - tmp
