@@ -33,7 +33,10 @@
     dest: /home/{{ user }}/.vim/autoload/plug.vim
     owner: "{{ user }}"
 
-- name: install vim plugins
-  command: vim +PlugInstall +qall
-  become: true
-  become_user: "{{ user }}"
+# FIXME: This runs a pretty slow vim command every time it's hit.
+# Just do it manually for now.
+#
+#- name: install vim plugins
+#  command: vim +PlugInstall +qall
+#  become: true
+#  become_user: "{{ user }}"
