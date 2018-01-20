@@ -22,6 +22,8 @@
     - i3status
     - suckless-tools
     - rxvt-unicode
+    - i3lock
+    - redshift
 - name: Set preferred terminal to urxvt
   alternatives:
     name: x-terminal-emulator
@@ -38,4 +40,3 @@
     - grafx2
     - mplayer
     - x11-xserver-utils
-    - gimp
