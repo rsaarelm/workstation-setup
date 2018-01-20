@@ -5,3 +5,17 @@
   roles:
     - workstation
     - htpc
+  tasks:
+    # Mount the HD specific to this one device, doesn't belong in generic
+    # settings.
+    - name: Create external HD mount dir
+      file:
+        path: /mnt/usb-hd
+        state: directory
+    - name: Mount external HD
+      mount:
+        path: /mnt/usb-hd
+        src: UUID=6b56f7c0-e2a1-40c6-8fe0-e86bf1a8ccf7
+        fstype: ext4
+        opts: noatime,rw
+        state: mounted
