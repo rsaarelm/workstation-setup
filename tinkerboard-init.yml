@@ -1,54 +1,29 @@
-# Find the dynamic IP of a machine in wired LAN with something like
-#
-#   nmap -sn 192.168.1.0/24
-#
-# Use playbook without having to enter the prompts:
-#
-#   ansible-playbook tinkerboard-init.yml --extra-vars "dynamic_ip=192.168.1.82 target_host=metasyntactic"
+# Set up a proper user on a Tinkerboard with a fresh TinkerOS image.
 #
 # The script will generate a user that's the same as your current host
 # username. If you want to override this, set 'main_user' in extra-vars
+#
+# Before running this script, find out the MAC addresses of the eth and wifi
+# network interfaces on the board and configure your router to assign fixed IP
+# addresses to them in DHCP. That way the board can work as a server.
 
-- hosts: localhost
-  gather_facts: no
-  vars_prompt:
-    - name: dynamic_ip
-      prompt: Enter Tinker Board current IP
-      private: no
-  tasks:
-    - add_host:
-        name: "{{ dynamic_ip }}"
-        groups: dynamically_created_hosts
-        # Out of the box TinkerOS image login/pass
-        ansible_ssh_user: linaro
-        ansible_ssh_pass: linaro
+# This is a separate playbook because it uses the default linaro user and
+# password, which you should disable soon afterwards.
 
-- hosts: dynamically_created_hosts
+- hosts: tinkerboard
   become: yes
   vars:
     new_user: "{{ main_user | default(lookup('env', 'USER')) }}"
-  vars_prompt:
-    - name: target_host
-      prompt: Hostname from inventory to configure the Tinker Board as
-      private: no
+    ansible_ssh_user: linaro
+    ansible_ssh_pass: linaro
   tasks:
-    - name: configure static IP address
-      blockinfile:
-        path: /etc/dhcpcd.conf
-        marker: "## {mark} ANSIBLE MANAGED BLOCK"
-        block: |
-          static
-          interface eth0
-          static ip_address={{ hostvars[target_host]['ansible_host'] }}
-          static routers=192.168.1.1
-          static domain_name_servers=192.168.1.1
-    - name: set hostname to '{{ target_host }}'
+    - name: set hostname to '{{ inventory_hostname }}'
       hostname:
-        name: "{{ target_host }}"
+        name: "{{ inventory_hostname }}"
     - lineinfile:
         dest: /etc/hosts
         state: present
-        line: '127.0.1.1       {{ target_host }}'
+        line: '127.0.1.1       {{ inventory_hostname }}'
 
     # XXX: The wheel group bit should be moved to some reusable place
     - name: create 'wheel' group
@@ -63,6 +38,8 @@
         line: '%wheel ALL=(ALL) NOPASSWD: ALL'
         validate: 'visudo -cf %s'
 
+    - name: install zsh
+      apt: name=zsh state=installed
     - name: setup user '{{ new_user }}'
       user:
         name: "{{ new_user }}"
@@ -71,6 +48,7 @@
         groups: wheel
         append: yes
         generate_ssh_key: yes
+        shell: /bin/zsh
     - name: setup /home/{{ new_user }}
       file:
         path: /home/{{ new_user }}
@@ -81,7 +59,3 @@
         user: "{{ new_user }}"
         state: present
         key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
-    - name: restart networking
-      service:
-        name: dhcpcd
-        state: restarted
