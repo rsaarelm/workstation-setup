@@ -59,3 +59,29 @@
         user: "{{ new_user }}"
         state: present
         key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+
+# TODO: Get this working. Currently need to just use network manager to configure wifi
+#- hosts: tinkerboard
+#  become: yes
+#  vars_prompt:
+#    - name: wifi_ssid
+#      prompt: enter wifi ssid
+#      private: no
+#    - name: wifi_psk
+#      prompt: enter wifi passphrase
+#  tasks:
+#    - name: configure wifi
+#      apt: name=wpasupplicant
+#    - name: configure wifi
+#      blockinfile:
+#        path: /etc/wpa_supplicant/wpa_supplicant.conf
+#        marker: "## {mark} ANSIBLE MANAGED BLOCK"
+#        block: |
+#          network= {
+#            ssid="{{ wifi_ssid }}"
+#            psk="{{ wifi_psk }}"
+#          }
+#    - name: restart networking
+#      service:
+#        name: networking
+#        state: restarted
