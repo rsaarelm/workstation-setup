@@ -18,6 +18,8 @@
     state: present
     regexp: "^TMPREAPER_DIRS="
     line: "TMPREAPER_DIRS='/tmp/. /home/{{ user }}/tmp/.'"
+
+- name: setup tmpreaper to delete files older than 30 days
   lineinfile:
     path: /etc/tmpreaper.conf
     state: present

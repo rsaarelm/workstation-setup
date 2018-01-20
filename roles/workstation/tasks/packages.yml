@@ -21,6 +21,7 @@
     - lightdm
     - i3status
     - suckless-tools
+    - rxvt-unicode
 - name: install desktop software
   apt: name={{item}} state=installed
   with_items:
