@@ -32,6 +32,5 @@
 
 - name: install vim plugins
   command: vim +PlugInstall +qall
-  chdir: /home/{{ user }}
   become: true
   become_user: "{{ user }}"
