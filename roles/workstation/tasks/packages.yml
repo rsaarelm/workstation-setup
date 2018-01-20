@@ -22,6 +22,10 @@
     - i3status
     - suckless-tools
     - rxvt-unicode
+- name: Set preferred terminal to urxvt
+  alternatives:
+    name: x-terminal-emulator
+    path: /usr/bin/urxvt
 - name: install desktop software
   apt: name={{item}} state=installed
   with_items:

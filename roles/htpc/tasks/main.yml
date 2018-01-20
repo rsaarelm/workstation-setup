@@ -22,6 +22,7 @@
     user: htpc
     state: present
     key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+# FIXME: This part doesn't seem to work?
 - name: set htpc as autologin user
   include_role:
     name: gantsign.lightdm
