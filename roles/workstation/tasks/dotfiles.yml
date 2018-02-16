@@ -6,9 +6,7 @@
   with_items:
     - .config/i3
     - .config/i3status
-    - .vim/autoload
-    - .vim/swap
-    - .vim/backup
+    - .config/nvim
   tags:
     - dotfiles
 
@@ -17,7 +15,7 @@
   copy: src={{ item }} dest=/home/{{ user }}/{{ item }} mode=0400 owner={{ user }}
   with_items:
     - .zshrc
-    - .vimrc
+    - .config/nvim/init.vim
     - .config/i3/config
     - .config/i3status/config
     - .Xresources
