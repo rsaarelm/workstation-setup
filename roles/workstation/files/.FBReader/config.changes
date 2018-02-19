@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <group name="Colors">
+    <option name="Background" value="11382207" category="ui"/>
+  </group>
+  <group name="Keys">
+    <option name="Action0" value="pageBackward" category="options"/>
+    <option name="Action1" value="pageForward" category="options"/>
+    <option name="Key0" value="&lt;BackSpace&gt;" category="options"/>
+    <option name="Key1" value="&lt;Space&gt;" category="options"/>
+    <option name="Number" value="2" category="options"/>
+  </group>
+  <group name="Style">
+    <option name="Base:fontFamily" value="DejaVu Serif" category="ui"/>
+    <option name="UseCustomFonts" value="true" category="ui"/>
+  </group>
+</config>

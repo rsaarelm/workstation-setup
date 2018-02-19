@@ -7,6 +7,7 @@
     - .config/i3
     - .config/i3status
     - .config/nvim
+    - .FBReader
   tags:
     - dotfiles
 
@@ -20,6 +21,7 @@
     - .config/i3status/config
     - .Xresources
     - .xsession
+    - .FBReader/config.changes
   tags:
     - dotfiles
 
