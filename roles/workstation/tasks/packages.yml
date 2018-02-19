@@ -14,6 +14,8 @@
     - optipng
     - zsh
     - tmpreaper
+    - rtorrent
+    - locate
 - name: install desktop environment
   apt: name={{item}} state=installed
   with_items:
@@ -40,3 +42,4 @@
     - grafx2
     - mplayer
     - x11-xserver-utils
+    - fbreader
