@@ -14,8 +14,8 @@ call plug#begin('~/.nvim/plugged')
 
 " NerdTree
 Plug 'scrooloose/nerdtree'
+map <S-TAB> :NERDTreeFind<cr><c-w><c-p>
 map <TAB> :call NERDTreeToggleAndFind()<cr>
-"map <C-TAB> :NERDTreeToggle<cr>
 function! NERDTreeToggleAndFind()
     if (exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1)
         execute ':NERDTreeClose'
@@ -25,6 +25,7 @@ function! NERDTreeToggleAndFind()
         else
             execute ':NERDTree'
         endif
+        execute ':wincmd p'
     endif
     endfunction
 let NERDTreeMapOpenExpl='j'  " Enable using Colemak vertical navigation
@@ -32,8 +33,14 @@ let NERDTreeMapOpenExpl='j'  " Enable using Colemak vertical navigation
 " Fugitive for Git
 Plug 'tpope/vim-fugitive'
 
+" gitgutter
+Plug 'airblade/vim-gitgutter'
+set updatetime=100           " Update gitgutter quickly
+
 " todo.txt
 Plug 'freitass/todo.txt-vim'
+" Make it recognize the third file in my todo workflow.
+autocmd BufNewFile,BufRead [Ss]omeday.txt set filetype=todo
 
 " Fuzzy Finder
 if has('win32') || has('win64')
@@ -70,7 +77,7 @@ set ignorecase      " Default search is case-insensitive
 set smartcase       " ...except when you write caps in the search expression
 
 set nojoinspaces    " Two spaces after a period is an abomination
-set colorcolumn=81  " Show show the forbidden zone
+set colorcolumn=81  " Show the forbidden zone
 set wrap            " Show long lines by default
 set textwidth=78
 
@@ -112,6 +119,9 @@ nnoremap <C-q> v|xnoremap <C-q> v
 vnoremap < <gv
 vnoremap > >gv
 
+" Fast buffer switching
+nnoremap <BS> <C-^>
+
 " Colemak navigation
 "
 " Up and down are used a lot, bind them to Colemak N and E.
@@ -148,7 +158,7 @@ autocmd FileType votl setlocal linebreak breakindentopt+=shift:3 breakindent col
 
 autocmd FileType todo setlocal linebreak breakindentopt+=shift:2 breakindent colorcolumn=0 formatoptions-=t
 
-autocmd FileType haskell setlocal shiftwidth=2
+autocmd FileType haskell setlocal shiftwidth=2 cursorcolumn
 
 
 " Commands
@@ -159,3 +169,7 @@ command! WhiteClean retab | %s/\s\+$
 
 " Expression-based folding in jrnl files
 command! JrnlFold setlocal foldexpr=getline(v:lnum)=~'^\\d\\d\\d\\d-\\d\\d-\\d\\d\\s\\d\\d:\\d\\d\\s.*'?'>1':1 foldmethod=expr
+
+if has('nvim')
+    colorscheme industry
+endif
