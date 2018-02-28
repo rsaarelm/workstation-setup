@@ -26,6 +26,7 @@
     - rxvt-unicode
     - i3lock
     - redshift
+    - xclip
 - name: Set preferred terminal to urxvt
   alternatives:
     name: x-terminal-emulator
