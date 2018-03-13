@@ -16,6 +16,8 @@
     - tmpreaper
     - rtorrent
     - locate
+    - hledger
+    - unrar
 - name: install desktop environment
   apt: name={{item}} state=installed
   with_items:
@@ -41,6 +43,6 @@
     - feh
     - vim-gtk3
     - grafx2
-    - mplayer
+    - mpv
     - x11-xserver-utils
     - fbreader
