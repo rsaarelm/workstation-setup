@@ -25,7 +25,7 @@
     - lightdm
     - i3status
     - suckless-tools
-    - rxvt-unicode
+    - rxvt-unicode-256color
     - i3lock
     - redshift
     - xclip
