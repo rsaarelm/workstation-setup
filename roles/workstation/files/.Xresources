@@ -17,13 +17,14 @@
 *color14: #a2ffff
 *color15: #eeeeec
 
-URxvt.background: Gray10
+URxvt.background: Gray20
 URxvt.foreground: Gray
 
 URxvt.font: 8x13
 URxvt.scrollBar: off
 URxvt.perl-ext: default,url-select
 URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.internalBorder: 0
 URxvt.url-select.launcher: chromium --incognito
 URxvt.url-select.underline: true
 URxvt*termName:rxvt
