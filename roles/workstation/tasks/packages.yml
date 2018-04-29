@@ -27,8 +27,6 @@
     - suckless-tools
     - rxvt-unicode-256color
     - i3lock
-    - redshift
-    - xclip
 - name: Set preferred terminal to urxvt
   alternatives:
     name: x-terminal-emulator
@@ -46,3 +44,6 @@
     - mpv
     - x11-xserver-utils
     - fbreader
+    - redshift
+    - xclip
+    - scrot
